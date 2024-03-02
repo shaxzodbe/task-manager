@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -15,7 +16,12 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return new TaskCollection(Task::paginate());
+        $tasks = QueryBuilder::for(Task::class)
+          ->allowedFilters('is_done')
+          ->defaultSort('-created_at')
+          ->paginate();
+
+        return new TaskCollection($tasks);
     }
 
     /**
