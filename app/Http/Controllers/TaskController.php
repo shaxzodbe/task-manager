@@ -15,7 +15,7 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): TaskCollection
     {
         $tasks = QueryBuilder::for(Task::class)
           ->allowedFilters('is_done')
