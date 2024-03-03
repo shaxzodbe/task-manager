@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
@@ -28,11 +29,11 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request)
+    public function store(StoreTaskRequest $request): TaskResource
     {
         $validated = $request->validated();
 
-        $task = Task::create($validated);
+        $task = Auth::user()->tasks()->create($validated);
 
         return new TaskResource($task);
     }
