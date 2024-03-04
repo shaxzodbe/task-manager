@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProjectController extends Controller
@@ -15,15 +17,13 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): ProjectResource
+    public function index(): ProjectCollection
     {
         $projects = QueryBuilder::for(Project::class)
-          ->allowedFilters('title')
-          ->defaultSort('-created_at')
-          ->allowedSorts(['title', 'created_at'])
+          ->allowedIncludes('tasks')
           ->paginate();
 
-        return new ProjectResource($projects);
+        return new ProjectCollection($projects);
     }
 
     /**
