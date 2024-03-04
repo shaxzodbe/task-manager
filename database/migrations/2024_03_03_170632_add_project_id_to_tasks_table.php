@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->nullable()->constrained()
+            $table->foreignId('project_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
