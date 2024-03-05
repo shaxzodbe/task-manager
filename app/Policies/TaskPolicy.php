@@ -13,7 +13,7 @@ class TaskPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +21,15 @@ class TaskPolicy
      */
     public function view(User $user, Task $task): bool
     {
-        //
+        if ($user->id === $task->creator_id) {
+            return true;
+        }
+
+        if ($task->project() && $user->memberships->contains($task->project())) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -29,7 +37,7 @@ class TaskPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -37,7 +45,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->creator_id;
     }
 
     /**
@@ -45,7 +53,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->creator_id;
     }
 
     /**
@@ -53,7 +61,7 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -61,6 +69,6 @@ class TaskPolicy
      */
     public function forceDelete(User $user, Task $task): bool
     {
-        //
+        return false;
     }
 }
